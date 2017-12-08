@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Sentiment Analysis using SO-CAL</title>
+        <link rel="stylesheet" href="static/style.css">
+    </head>
+    <body>
+        <script>
+            function IsJsonString(str) {
+                if(str == '')
+                        return false;
+                else
+                    try {
+                        json_conf = JSON.parse(str);
+                        if (!(json_conf.sentences  != undefined || json_conf.review != undefined || json_conf.reviews != undefined))
+                                return false;
+                    } catch (e) {
+                        return false;
+                    }
+                return true;
+            }
+            function submitform(){
+                action_url = "visualize_sentiment"
+                json_review = JSON.stringify({ "review": document.getElementById("json_config").value })
+                console.log("Sending Json");
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                       document.getElementById('response_text').innerHTML = xhr.responseText
+                    }
+                }
+                xhr.open(input_form.method, action_url, true);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+                xhr.send(json_review);
+            }
+        </script>
+
+        <form class="form-container" action="http://peerlogic.csc.ncsu.edu/rainbowgraph/configure" method="POST" name="input_form">
+            <div><h2 class="form-title">Sentiment Analysis</h2></div>
+            <div class="form-title">Enter a review in a JSON format</div>
+            <p><textarea rows="20" cols="160"  name="json config" id="json_config" class="form-field"></textarea></p>
+            <p><button type="button"  class="submit-button" onclick="submitform()">Go analyze my review!</button></p>
+        </form>
+        <br/>
+        <div class="form-container">
+            <h2 class="form-title">Result</h2>
+            <pre id="response_text" class="text_placeholder"></pre>
+        </div>
+        <br/>
+    </body>
+</html>
