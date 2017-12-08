@@ -1,6 +1,5 @@
 import os
 import SO_CALC
-import hello
 from pycorenlp import StanfordCoreNLP
 
 
